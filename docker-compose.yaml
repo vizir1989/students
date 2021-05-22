@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:6.2.3
+    container_name: cache
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  database:
+    image: mongo:4.4.6
+    container_name: mongo_db
+    env_file:
+      - .env
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo_db:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  web:
+    build:
+      dockerfile: docker/Dockerfile
+      context: .
+    container_name: web_students
+    volumes:
+      - ./project:/usr/src/app
+    ports:
+      - 8004:8000
+    depends_on:
+        redis:
+          condition: service_healthy
+        database:
+          condition: service_healthy
+    env_file:
+      - .env
