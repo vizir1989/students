@@ -15,11 +15,19 @@ services:
     container_name: mongo_db
     env_file:
       - .env
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: root
+        MONGO_INITDB_DATABASE: fastapi
+    volumes:
+        - ./data/mongodb/mongod.conf:/etc/mongod.conf
+        - ./data/mongodb/initdb.d/:/docker-entrypoint-initdb.d/
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo mongo_db:27017/test --quiet
       interval: 10s
       timeout: 10s
       retries: 5
+    command: ["-f", "/etc/mongod.conf"]
 
   web:
     build:

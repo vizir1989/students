@@ -8,6 +8,8 @@ from .endpoints.profile import router as profile_router
 from .endpoints.tag import router as tag_router
 from .endpoints.user import router as user_router
 
+API_VERSION = '/v1'
+
 router = APIRouter()
 router.include_router(auth_router)
 router.include_router(user_router)

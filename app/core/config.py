@@ -4,11 +4,11 @@ from databases import DatabaseURL
 from dotenv import load_dotenv
 from starlette.datastructures import CommaSeparatedStrings, Secret
 
-API_V1_STR = "/api"
+API_STR = "/api"
 
 load_dotenv(".env")
 
-JWT_TOKEN_PREFIX = "Token"
+JWT_TOKEN_PREFIX = "Bearer"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # one week
 
 MONGO_MAX_CONNECTIONS_COUNT = int(os.getenv("MONGO_MAX_CONNECTIONS_COUNT", 10))
@@ -24,11 +24,11 @@ MONGO_INITDB_DATABASE = os.getenv("MONGO_INITDB_DATABASE", "fastapi")
 if not MONGODB_URL:
     MONGO_HOST = os.getenv("MONGO_HOST", "localhost")
     MONGO_PORT = int(os.getenv("MONGO_PORT", 27017))
-    MONGO_INITDB_ROOT_USERNAME = os.getenv("MONGO_INITDB_ROOT_USERNAME", "admin")
-    MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD", "admin")
+    MONGO_INITDB_USERNAME = os.getenv("MONGO_INITDB_USER", "mongodb")
+    MONGO_INITDB_PWD = os.getenv("MONGO_INITDB_PWD", "mongodb")
 
     MONGODB_URL = DatabaseURL(
-        f"mongodb://{MONGO_INITDB_ROOT_USERNAME}:{MONGO_INITDB_ROOT_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_INITDB_DATABASE}"
+        f"mongodb://{MONGO_INITDB_USERNAME}:{MONGO_INITDB_PWD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_INITDB_DATABASE}"
     )
 else:
     MONGODB_URL = DatabaseURL(MONGODB_URL)
