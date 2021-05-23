@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "fast api with mongodb"
+version = "0.1.0"
+description = "Backend logic implementation"
+authors = ["ninchuk <vladislav.ninchuk@gmail.com"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+uvicorn = "^0.6.1"
+gunicorn = "^19.9"
+fastapi = "^0.29"
+pydantic = {version = "^0.26.0",extras = ["email"]}
+passlib = {version = "^1.7",extras = ["bcrypt"]}
+pyjwt = "^1.7"
+python-slugify = "^3.0"
+Unidecode = "^1.0"
+python-dotenv = "^0.10.1"
+databases = "^0.2.1"
+motor = "^2.0"
+
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+
+[tool.black]
+exclued = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

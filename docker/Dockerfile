@@ -1,22 +1,16 @@
-# pull official base image
-FROM python:3.9.2-slim-buster
+FROM python:3.7
 
-# set working directory
 WORKDIR /usr/src/app
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+COPY poetry.lock .
+COPY pyproject.toml .
+RUN pip install poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install
 
-# install system dependencies
-RUN apt-get update \
-  && apt-get -y install netcat gcc \
-  && apt-get clean
-
-# install python dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
-
-# add app
 COPY . .
+
+EXPOSE 8000
+
+CMD PYTHONPATH=. gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0
+#CMD while true; do echo 'Hit CTRL+C'; sleep 1; done

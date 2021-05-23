@@ -25,9 +25,9 @@ services:
     build:
       dockerfile: docker/Dockerfile
       context: .
-    container_name: web_students
+    container_name: web
     volumes:
-      - ./project:/usr/src/app
+      - .:/usr/src/app
     ports:
       - 8004:8000
     depends_on:
