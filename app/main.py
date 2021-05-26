@@ -8,15 +8,7 @@ from app.core.config import ALLOWED_HOSTS, API_STR, PROJECT_NAME
 from app.core.errors import http_422_error_handler, http_error_handler
 from app.db.mongodb.db_utils import close_mongo_connection, connect_to_mongo
 
-authorizations = {
-    'apikey': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'authorization'
-    }
-}
-
-app = FastAPI(title=PROJECT_NAME, authorizations=authorizations, security='apikey',)
+app = FastAPI(title=PROJECT_NAME)
 
 if not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ["*"]

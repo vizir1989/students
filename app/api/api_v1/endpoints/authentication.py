@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Body, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 from starlette.exceptions import HTTPException
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
@@ -9,17 +10,17 @@ from app.core.jwt import create_access_token
 from app.crud.shortcuts import check_free_username_and_email
 from app.crud.user import create_user, get_user_by_email
 from app.db.mongodb.db import AsyncIOMotorClient, get_database
-from app.models.user import User, UserInCreate, UserInLogin, UserInResponse
+from app.models.user import User, UserInCreate, UserInLogin, UserInResponse, UserWithToken
 
 router = APIRouter()
 
 
-@router.post("/users/login", response_model=UserInResponse, tags=["authentication"])
+@router.post("/users/login", response_model=UserWithToken, tags=["authentication"])
 async def login(
-        user: UserInLogin = Body(..., embed=True), db: AsyncIOMotorClient = Depends(get_database)
+        form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncIOMotorClient = Depends(get_database)
 ):
-    dbuser = await get_user_by_email(db, user.email)
-    if not dbuser or not dbuser.check_password(user.password):
+    dbuser = await get_user_by_email(db, form_data.username)
+    if not dbuser or not dbuser.check_password(form_data.password):
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Incorrect email or password"
         )
@@ -28,7 +29,7 @@ async def login(
     token = create_access_token(
         data={"username": dbuser.username}, expires_delta=access_token_expires
     )
-    return UserInResponse(user=User(**dbuser.dict(), token=token))
+    return UserWithToken(user=User(**dbuser.dict()), access_token=token, token_type='Bearer')
 
 
 @router.post(

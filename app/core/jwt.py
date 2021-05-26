@@ -3,6 +3,7 @@ from typing import Optional
 
 import jwt
 from fastapi import Depends, Header
+from fastapi.security import OAuth2PasswordBearer
 from jwt import PyJWTError
 from starlette.exceptions import HTTPException
 from starlette.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
@@ -12,10 +13,11 @@ from app.db.mongodb.db import AsyncIOMotorClient, get_database
 from app.models.token import TokenPayload
 from app.models.user import User
 
-from .config import JWT_TOKEN_PREFIX, SECRET_KEY
+from .config import JWT_TOKEN_PREFIX, SECRET_KEY, ALGORITHM
 
-ALGORITHM = "HS256"
 access_token_jwt_subject = "access"
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/users/login")
 
 
 def _get_authorization_token(authorization: str = Header(...)):

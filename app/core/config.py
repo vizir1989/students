@@ -9,11 +9,13 @@ API_STR = "/api"
 load_dotenv(".env")
 
 JWT_TOKEN_PREFIX = "Bearer"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # one week
+ACCESS_TOKEN_EXPIRE_MINUTES = 30  # one week
+SECRET_KEY = Secret(os.getenv("SECRET_KEY", "secret key for project"))
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
 MONGO_MAX_CONNECTIONS_COUNT = int(os.getenv("MONGO_MAX_CONNECTIONS_COUNT", 10))
 MONGO_MIN_CONNECTIONS_COUNT = int(os.getenv("MONGO_MIN_CONNECTIONS_COUNT", 10))
-SECRET_KEY = Secret(os.getenv("SECRET_KEY", "secret key for project"))
+
 
 PROJECT_NAME = os.getenv("PROJECT_NAME", "FastAPI example application")
 ALLOWED_HOSTS = CommaSeparatedStrings(os.getenv("ALLOWED_HOSTS", ""))
