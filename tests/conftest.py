@@ -1,11 +1,12 @@
 from pytest import fixture
 from starlette.config import environ
 from starlette.testclient import TestClient
-from app.db.mongodb.db.db import get_database
+from app.db.mongodb.db import get_database
+from app.core import config
 from app.core.config import database_name, users_collection_name
 
 
-@fixture(scope="session")
+@fixture(scope="function")
 def test_user():
     return {
         "user": {
@@ -16,9 +17,15 @@ def test_user():
     }
 
 
-@fixture(scope="session")
-def test_client(test_user):
+@fixture(scope="function")
+def test_database(monkeypatch):
+    monkeypatch.setattr(config, 'database_name', 'test_fastapi')
+
+
+@fixture(scope="function")
+def test_client(test_user, test_database):
     from app.main import app
+    test = database_name
     with TestClient(app) as test_client:
         yield test_client
 

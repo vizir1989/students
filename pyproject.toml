@@ -24,6 +24,9 @@ python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
+tox = "^3.23.1"
+coverage = "^5.5"
+pytest-mongo = "^2.1.0"
 
 [tool.black]
 exclued = '''
