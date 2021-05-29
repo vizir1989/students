@@ -5,6 +5,8 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+
+
 COPY poetry.lock .
 COPY pyproject.toml .
 RUN pip install poetry && \

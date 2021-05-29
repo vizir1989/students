@@ -8,7 +8,7 @@ from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from app.core.config import ACCESS_TOKEN_EXPIRE_MINUTES
 from app.core.jwt import create_access_token
 from app.crud.shortcuts import check_free_username_and_email
-from app.crud.user import create_user, get_user_by_email
+from app.crud.user import create_user, get_user_by_email, get_user
 from app.db.mongodb.db import AsyncIOMotorClient, get_database
 from app.models.user import User, UserInCreate, UserInLogin, UserInResponse, UserWithToken
 
@@ -19,10 +19,10 @@ router = APIRouter()
 async def login(
         form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncIOMotorClient = Depends(get_database)
 ):
-    dbuser = await get_user_by_email(db, form_data.username)
+    dbuser = await get_user(db, form_data.username)
     if not dbuser or not dbuser.check_password(form_data.password):
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST, detail="Incorrect email or password"
+            status_code=HTTP_400_BAD_REQUEST, detail="Incorrect user name or password"
         )
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)

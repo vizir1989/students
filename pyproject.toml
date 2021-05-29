@@ -20,13 +20,15 @@ databases = "^0.2.1"
 motor = "^2.0"
 python-jose = "^3.2.0"
 python-multipart = "^0.0.5"
+requests = "^2.25.1"
 
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
 tox = "^3.23.1"
 coverage = "^5.5"
-pytest-mongo = "^2.1.0"
+tox-poetry = "^0.3.0"
+
 
 [tool.black]
 exclued = '''
