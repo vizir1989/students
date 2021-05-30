@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from os import walk, path
 
 from pytest import fixture
@@ -11,7 +10,6 @@ from app.db.mongodb.db import get_database
 
 
 def find_all(collection_name, collection_filter):
-
     import asyncio
 
     loop = asyncio.get_event_loop()
@@ -26,8 +24,6 @@ async def find_all_function(db, collection_name, collection_filter):
     for item in await cursor.to_list(length=100):
         result.append(item)
     return result
-
-
 
 
 @fixture(scope='function')
@@ -67,6 +63,7 @@ def create_user_fixture(mongo_load_fixture):
 def patch_verify_password(monkeypatch):
     def unhashed_check_password(instance, password):
         return instance.hashed_password == password
+
     monkeypatch.setattr('app.models.user.UserInDB.check_password', unhashed_check_password)
 
 
@@ -79,6 +76,7 @@ def users_login_fixture(mongo_load_fixture, patch_verify_password):
 def patch_jwt_decode(monkeypatch):
     def mocked_decode(token, *args, **kwargs):
         return {'username': token}
+
     monkeypatch.setattr('jwt.decode', mocked_decode)
 
 

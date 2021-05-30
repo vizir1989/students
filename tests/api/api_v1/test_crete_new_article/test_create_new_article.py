@@ -2,8 +2,7 @@ import os
 
 import pytest
 
-from app.core.config import database_name, article_collection_name
-from app.db.mongodb.db import get_database
+from app.core.config import article_collection_name
 from tests.conftest import find_all
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
