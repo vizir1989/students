@@ -1,0 +1,13 @@
+[
+  {
+    "title": "title 1",
+    "description": "description 1",
+    "body": "body 1",
+    "tag_list": [
+      "tag 1",
+      "tag2"
+    ],
+    "slug": "title-1",
+    "author_id": "test1"
+  }
+]
