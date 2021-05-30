@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from os import walk, path
 
 from pytest import fixture
@@ -7,6 +8,26 @@ from starlette.testclient import TestClient
 
 from app.core.config import database_name
 from app.db.mongodb.db import get_database
+
+
+def find_all(collection_name, collection_filter):
+
+    import asyncio
+
+    loop = asyncio.get_event_loop()
+    db = loop.run_until_complete(get_database())
+
+    return loop.run_until_complete(find_all_function(db, collection_name, collection_filter))
+
+
+async def find_all_function(db, collection_name, collection_filter):
+    result = []
+    cursor = db[database_name][collection_name].find(collection_filter)
+    for item in await cursor.to_list(length=100):
+        result.append(item)
+    return result
+
+
 
 
 @fixture(scope='function')
@@ -43,15 +64,28 @@ def create_user_fixture(mongo_load_fixture):
 
 
 @fixture(scope='function')
-def mock_verify_password(monkeypatch):
+def patch_verify_password(monkeypatch):
     def unhashed_check_password(instance, password):
         return instance.hashed_password == password
     monkeypatch.setattr('app.models.user.UserInDB.check_password', unhashed_check_password)
 
 
 @fixture(scope='function')
-def users_login_fixture(mongo_load_fixture, mock_verify_password):
+def users_login_fixture(mongo_load_fixture, patch_verify_password):
     pass
+
+
+@fixture(scope='function')
+def patch_jwt_decode(monkeypatch):
+    def mocked_decode(token, *args, **kwargs):
+        return {'username': token}
+    monkeypatch.setattr('jwt.decode', mocked_decode)
+
+
+@fixture(scope='function')
+def create_new_article_fixture(mongo_load_fixture, patch_jwt_decode):
+    pass
+
 
 # This line would raise an error if we use it after 'settings' has been imported.
 environ['TESTING'] = 'TRUE'
