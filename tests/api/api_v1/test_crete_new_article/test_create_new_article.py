@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from app.core.config import article_collection_name
+from app.core.config import article_collection_name, JWT_TOKEN_PREFIX
 from tests.conftest import find_all
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -10,7 +10,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 TASK_FIXTURE = os.path.join(dir_path, 'fixture')
 
 
-@pytest.mark.parametrize('fixtures_dir, article, token, expected_code',
+@pytest.mark.parametrize('fixtures_dir, article, username, expected_code, expected_articles_number',
                          (
                                  [
                                      TASK_FIXTURE,
@@ -23,8 +23,9 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                                  'tagList': ['tag 1', 'tag 2']
                                              }
                                      },
-                                     "Bearer test1",
-                                     422
+                                     'test1',
+                                     422,
+                                     1
                                  ],
                                  [
                                      TASK_FIXTURE,
@@ -37,12 +38,31 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                                  'tagList': ['tag 1', 'tag 3']
                                              }
                                      },
-                                     'Bearer test1',
-                                     201
+                                     'test1',
+                                     201,
+                                     1
+                                 ],
+                                 [
+                                     TASK_FIXTURE,
+                                     {
+                                         'article':
+                                             {
+                                                 'title': 'title 2',
+                                                 'description': 'description 2',
+                                                 'body': 'body 2',
+                                                 'tagList': ['tag 1', 'tag 3']
+                                             }
+                                     },
+                                     'test2',
+                                     404,
+                                     0
                                  ]
                          )
                          )
-def test_create_new_article(test_client, create_new_article_fixture, article, token, expected_code):
+def test_create_new_article(test_client, create_new_article_fixture, article, username, expected_code,
+                            expected_articles_number):
+    token = JWT_TOKEN_PREFIX + ' ' + username
     response = test_client.post('/api/v1/articles', headers={'Authorization': token}, json=article)
     assert response.status_code == expected_code
-    assert len(find_all(article_collection_name, {'title': article['article']['title']})) == 1
+    collection_filter = {'title': article['article']['title'], 'author_id': username}
+    assert len(find_all(article_collection_name, collection_filter)) == expected_articles_number

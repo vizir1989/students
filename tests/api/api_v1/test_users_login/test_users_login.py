@@ -10,7 +10,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 TASK_FIXTURE = os.path.join(dir_path, 'fixture')
 
 
-@pytest.mark.parametrize('fixtures_dir, user, expected_code, user_number',
+@pytest.mark.parametrize('fixtures_dir, user, expected_code, expected_user_number',
                          (
                                  [
                                      TASK_FIXTURE,
@@ -34,7 +34,7 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                  ]
                          )
                          )
-def test_users_login(test_client, users_login_fixture, user, expected_code, user_number):
+def test_users_login(test_client, users_login_fixture, user, expected_code, expected_user_number):
     response = test_client.post('/api/v1/users/login', data=user)
     assert response.status_code == expected_code
-    assert len(find_all(users_collection_name, {'username': user['username']})) == user_number
+    assert len(find_all(users_collection_name, {'username': user['username']})) == expected_user_number

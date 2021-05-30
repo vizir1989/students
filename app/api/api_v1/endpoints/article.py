@@ -118,7 +118,7 @@ async def create_new_article(
 
 @router.put("/articles/{slug}", response_model=ArticleInResponse, tags=["articles"])
 async def update_article(
-        slug: str = Path(..., min_length=1),
+        slug: str = Path(..., min_length=5),
         article: ArticleInUpdate = Body(..., embed=True),
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
@@ -133,7 +133,7 @@ async def update_article(
 
 @router.delete("/articles/{slug}", tags=["articles"], status_code=HTTP_204_NO_CONTENT)
 async def delete_article(
-        slug: str = Path(..., min_length=1),
+        slug: str = Path(..., min_length=5),
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
@@ -148,7 +148,7 @@ async def delete_article(
     "/articles/{slug}/favorite", response_model=ArticleInResponse, tags=["articles"]
 )
 async def favorite_article(
-        slug: str = Path(..., min_length=1),
+        slug: str = Path(..., min_length=5),
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
@@ -170,7 +170,7 @@ async def favorite_article(
     "/articles/{slug}/favorite", response_model=ArticleInResponse, tags=["articles"]
 )
 async def delete_article_from_favorites(
-        slug: str = Path(..., min_length=1),
+        slug: str = Path(..., min_length=5),
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
