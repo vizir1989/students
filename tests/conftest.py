@@ -94,5 +94,11 @@ def delete_article_fixture(mongo_load_fixture, patch_jwt_decode):
 def update_article_fixture(mongo_load_fixture, patch_jwt_decode):
     pass
 
+
+@fixture(scope='function')
+def get_article_fixture(mongo_load_fixture, patch_jwt_decode):
+    pass
+
+
 # This line would raise an error if we use it after 'settings' has been imported.
 environ['TESTING'] = 'TRUE'
