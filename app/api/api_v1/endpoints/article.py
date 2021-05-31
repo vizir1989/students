@@ -45,7 +45,7 @@ async def get_articles(
         tag: str = "",
         author: str = "",
         favorited: str = "",
-        limit: int = Query(20, gt=0),
+        limit: int = Query(20, gt=0, lt=100),
         offset: int = Query(0, ge=0),
         user: User = Depends(get_current_user_authorizer(required=False)),
         db: AsyncIOMotorClient = Depends(get_database),

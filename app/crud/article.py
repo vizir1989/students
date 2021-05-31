@@ -28,8 +28,8 @@ async def is_article_favorited_by_user(
                                                                                      "article_id": article_doc['_id']})
         return count > 0
     else:
-        raise RuntimeError(f"没有找到对应的user_id或article_id,"
-                           f" 用户名={username} user={user_doc},slug={slug} article={article_doc}")
+        raise RuntimeError(f"No corresponding user_id or article_id was found,"
+                           f" username={username} user={user_doc},slug={slug} article={article_doc}")
 
 
 async def add_article_to_favorites(conn: AsyncIOMotorClient, slug: str, username: str):
@@ -160,31 +160,32 @@ async def get_articles_with_filters(
     base_query = {}
 
     if filters.tag:
-        base_query["tag_list"] = f"$all: [\"{filters.tag}\"]"
+        base_query["tag_list"] = {"$all": [f"{filters.tag}"]}
 
     if filters.favorited:
-        base_query["slug"] = f"$in: [\"{filters.favorited}\"]"
+        base_query["slug"] = {"$in": [f"{filters.favorited}"]}
 
     if filters.author:
-        base_query["author"] = f"$in: [\"{filters.author}]\""
+        base_query["author_id"] = {"$in": [f"[{filters.author}"]}
 
-    rows = conn[database_name][article_collection_name].find({"author_id": username},
+    rows = conn[database_name][article_collection_name].find(base_query,
                                                              limit=filters.limit,
                                                              skip=filters.offset)
 
     async for row in rows:
         slug = row["slug"]
         author = await get_profile_for_user(conn, row["author_id"], username)
-        tags = await get_tags_for_article(conn, slug)
         favorites_count = await get_favorites_count_for_article(conn, slug)
-        favorited_by_user = await is_article_favorited_by_user(conn, slug, username)
+        favorited_by_user = False
+        if username:
+            favorited_by_user = await is_article_favorited_by_user(conn, slug, username)
         articles.append(
             ArticleInDB(
                 **row,
                 author=author,
                 created_at=ObjectId(row["_id"]).generation_time,
                 favorites_count=favorites_count,
-                favorited=favorited_by_user,
+                favorited=favorited_by_user
             )
         )
     return articles

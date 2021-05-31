@@ -1,12 +1,16 @@
 import json
 from os import walk, path
 
+import datetime
 from pytest import fixture
 from starlette.config import environ
 from starlette.testclient import TestClient
 
 from app.core.config import database_name
 from app.db.mongodb.db import get_database
+
+
+FAKE_TIME = datetime.datetime(2020, 1, 1, 0, 0, 0).strftime("%Y-%m-%dT%H:%M:%S%ZZ")
 
 
 def find_all(collection_name, collection_filter):
@@ -96,7 +100,18 @@ def update_article_fixture(mongo_load_fixture, patch_jwt_decode):
 
 
 @fixture(scope='function')
-def get_article_fixture(mongo_load_fixture, patch_jwt_decode):
+def generation_time_mock(monkeypatch, mocker):
+    property_mock = mocker.PropertyMock(return_value=FAKE_TIME)
+    monkeypatch.setattr('bson.objectid.ObjectId.generation_time', property_mock)
+
+
+@fixture(scope='function')
+def get_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+    pass
+
+
+@fixture(scope='function')
+def get_articles_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
     pass
 
 
