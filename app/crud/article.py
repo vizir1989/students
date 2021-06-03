@@ -1,16 +1,17 @@
+from datetime import datetime
 from typing import List, Optional
+
 from bson import ObjectId
 from slugify import slugify
-from datetime import datetime
 
+from app.core.config import database_name, Collection
+from app.db.mongodb.db import AsyncIOMotorClient
 from app.models.article import (
     ArticleFilterParams,
     ArticleInCreate,
     ArticleInDB,
     ArticleInUpdate,
 )
-from app.db.mongodb.db import AsyncIOMotorClient
-from app.core.config import database_name, Collection
 from .profile import get_profile_for_user
 from .tag import (
     create_tags_that_not_exist,
@@ -19,13 +20,15 @@ from .tag import (
 
 
 async def is_article_favorited_by_user(
-    conn: AsyncIOMotorClient, slug: str, username: str
+        conn: AsyncIOMotorClient, slug: str, username: str
 ) -> bool:
-    user_doc = await conn[database_name][Collection.users.value].find_one({"username": username}, projection={"id": True})
+    user_doc = await conn[database_name][Collection.users.value].find_one({"username": username},
+                                                                          projection={"id": True})
     article_doc = await conn[database_name][Collection.article.value].find_one({"slug": slug}, projection={"id": True})
     if article_doc and user_doc:
         count = await conn[database_name][Collection.favorites.value].count_documents({"user_id": user_doc['_id'],
-                                                                                     "article_id": article_doc['_id']})
+                                                                                       "article_id": article_doc[
+                                                                                           '_id']})
         return count > 0
     else:
         raise RuntimeError(f"No corresponding user_id or article_id was found,"
@@ -33,14 +36,15 @@ async def is_article_favorited_by_user(
 
 
 async def add_article_to_favorites(conn: AsyncIOMotorClient, slug: str, username: str):
-    user_doc = await conn[database_name][Collection.users.value].find_one({"username": username}, projection={"id": True})
+    user_doc = await conn[database_name][Collection.users.value].find_one({"username": username},
+                                                                          projection={"id": True})
     article_doc = await conn[database_name][Collection.article.value].find_one({"slug": slug}, projection={"id": True})
     if article_doc and user_doc:
         await conn[database_name][Collection.favorites.value].insert_one({"user_id": user_doc['_id'],
-                                                                                "article_id": article_doc['_id']})
+                                                                          "article_id": article_doc['_id']})
     else:
-        raise RuntimeError(f"没有找到对应的user_id或article_id,"
-                           f" 用户名={username} user_id={user_doc},slug={slug} article_id={article_doc}")
+        raise RuntimeError(f"No corresponding user_id or article_id was found,"
+                           f" username={username} user_id={user_doc},slug={slug} article_id={article_doc}")
 
 
 async def remove_article_from_favorites(conn: AsyncIOMotorClient, slug: str, username: str):
@@ -48,10 +52,10 @@ async def remove_article_from_favorites(conn: AsyncIOMotorClient, slug: str, use
     article_doc = await conn[database_name][Collection.article.value].find_one({"slug": slug})
     if article_doc and user_doc:
         await conn[database_name][Collection.favorites.value].delete_many({"user_id": user_doc['_id'],
-                                                                          "article_id": article_doc['_id']})
+                                                                           "article_id": article_doc['_id']})
     else:
-        raise RuntimeError(f"没有找到对应的user_id或article_id,"
-                           f" 用户名={username} user_id={user_doc},slug={slug} article_id={article_doc}")
+        raise RuntimeError(f"The corresponding user_id or article_id was not found,"
+                           f" username={username} user_id={user_doc},slug={slug} article_id={article_doc}")
 
 
 async def get_favorites_count_for_article(conn: AsyncIOMotorClient, slug: str) -> int:
@@ -59,12 +63,12 @@ async def get_favorites_count_for_article(conn: AsyncIOMotorClient, slug: str) -
     if article_doc:
         return await conn[database_name][Collection.favorites.value].count_documents({"article_id": article_doc['_id']})
     else:
-        raise RuntimeError(f"没有找到对应的article_id,"
+        raise RuntimeError(f"The corresponding article_id was not found,"
                            f" slug={slug} article_id={article_doc}")
 
 
 async def get_article_by_slug(
-    conn: AsyncIOMotorClient, slug: str, username: Optional[str] = None
+        conn: AsyncIOMotorClient, slug: str, username: Optional[str] = None
 ) -> ArticleInDB:
     article_doc = await conn[database_name][Collection.article.value].find_one({"slug": slug})
     if article_doc:
@@ -79,7 +83,7 @@ async def get_article_by_slug(
 
 
 async def create_article_by_slug(
-    conn: AsyncIOMotorClient, article: ArticleInCreate, username: str
+        conn: AsyncIOMotorClient, article: ArticleInCreate, username: str
 ) -> ArticleInDB:
     slug = slugify(article.title)
     article_doc = article.dict()
@@ -102,7 +106,7 @@ async def create_article_by_slug(
 
 
 async def update_article_by_slug(
-    conn: AsyncIOMotorClient, slug: str, article: ArticleInUpdate, username: str
+        conn: AsyncIOMotorClient, slug: str, article: ArticleInUpdate, username: str
 ) -> ArticleInDB:
     dbarticle = await get_article_by_slug(conn, slug, username)
 
@@ -118,7 +122,8 @@ async def update_article_by_slug(
         dbarticle.tag_list = article.tag_list
 
     dbarticle.updated_at = datetime.now()
-    await conn[database_name][Collection.article.value].replace_one({"slug": slug, "author_id": username}, dbarticle.dict())
+    await conn[database_name][Collection.article.value].replace_one({"slug": slug, "author_id": username},
+                                                                    dbarticle.dict())
 
     dbarticle.created_at = ObjectId(dbarticle.id).generation_time
     return dbarticle
@@ -126,15 +131,15 @@ async def update_article_by_slug(
 
 async def delete_article_by_slug(conn: AsyncIOMotorClient, slug: str, username: str):
     await conn[database_name][Collection.article.value].delete_many({"author_id": username,
-                                                                    "slug": slug})
+                                                                     "slug": slug})
 
 
 async def get_user_articles(
-    conn: AsyncIOMotorClient, username: str, limit=20, offset=0
+        conn: AsyncIOMotorClient, username: str, limit=20, offset=0
 ) -> List[ArticleInDB]:
     articles: List[ArticleInDB] = []
     article_docs = conn[database_name][Collection.article.value].find({"author_id": username},
-                                                                       limit=limit, skip=offset)
+                                                                      limit=limit, skip=offset)
     async for row in article_docs:
         slug = row["slug"]
         author = await get_profile_for_user(conn, row["author_id"], username)
@@ -154,7 +159,7 @@ async def get_user_articles(
 
 
 async def get_articles_with_filters(
-    conn: AsyncIOMotorClient, filters: ArticleFilterParams, username: Optional[str] = None
+        conn: AsyncIOMotorClient, filters: ArticleFilterParams, username: Optional[str] = None
 ) -> List[ArticleInDB]:
     articles: List[ArticleInDB] = []
     base_query = {}
@@ -169,8 +174,8 @@ async def get_articles_with_filters(
         base_query["author_id"] = {"$in": [f"[{filters.author}"]}
 
     rows = conn[database_name][Collection.article.value].find(base_query,
-                                                             limit=filters.limit,
-                                                             skip=filters.offset)
+                                                              limit=filters.limit,
+                                                              skip=filters.offset)
 
     async for row in rows:
         slug = row["slug"]

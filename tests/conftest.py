@@ -7,6 +7,7 @@ from starlette.config import environ
 from starlette.testclient import TestClient
 
 from app.core.config import database_name, Collection
+from app.crud.article import add_article_to_favorites
 from app.db.mongodb.db import get_database
 
 
@@ -116,6 +117,16 @@ def get_articles_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_m
 @fixture(scope='function')
 def post_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
     pass
+
+
+@fixture(scope='function')
+def delete_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+    import asyncio
+    loop = asyncio.get_event_loop()
+    db = loop.run_until_complete(get_database())
+
+    loop.run_until_complete(add_article_to_favorites(db, 'title-1', 'test2'))
+    loop.run_until_complete(add_article_to_favorites(db, 'title-2', 'test1'))
 
 
 # This line would raise an error if we use it after 'settings' has been imported.
