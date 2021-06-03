@@ -129,5 +129,10 @@ def delete_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_tim
     loop.run_until_complete(add_article_to_favorites(db, 'title-2', 'test1'))
 
 
+@fixture(scope='function')
+def create_comments_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+    pass
+
+
 # This line would raise an error if we use it after 'settings' has been imported.
 environ['TESTING'] = 'TRUE'

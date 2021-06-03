@@ -32,7 +32,7 @@ async def create_comment_for_article(
     await get_article_or_404(db, slug, user.username)
 
     dbcomment = await create_comment(db, slug, comment, user.username)
-    return create_aliased_response(CommentInResponse(comment=dbcomment))
+    return create_aliased_response(CommentInResponse(comment=dbcomment), status_code=HTTP_201_CREATED)
 
 
 @router.get(
