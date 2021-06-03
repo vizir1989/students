@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from app.core.config import users_collection_name
+from app.core.config import Collection
 from tests.conftest import find_all
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -37,4 +37,4 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
 def test_users_login(test_client, users_login_fixture, user, expected_code, expected_user_number):
     response = test_client.post('/api/v1/users/login', data=user)
     assert response.status_code == expected_code
-    assert len(find_all(users_collection_name, {'username': user['username']})) == expected_user_number
+    assert len(find_all(Collection.users.value, {'username': user['username']})) == expected_user_number

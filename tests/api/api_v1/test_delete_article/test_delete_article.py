@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from app.core.config import article_collection_name
+from app.core.config import Collection
 from tests.conftest import find_all
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -40,7 +40,7 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                          )
 def test_delete_article(test_client, delete_article_fixture, token, slug, expected_code, article_before,
                         article_after):
-    assert len(find_all(article_collection_name, {'slug': slug})) == article_before
+    assert len(find_all(Collection.article.value, {'slug': slug})) == article_before
     response = test_client.delete(f'/api/v1/articles/{slug}', headers={'Authorization': token})
     assert response.status_code == expected_code
-    assert len(find_all(article_collection_name, {'slug': slug})) == article_after
+    assert len(find_all(Collection.article.value, {'slug': slug})) == article_after

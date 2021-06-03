@@ -2,6 +2,7 @@ import os
 
 from databases import DatabaseURL
 from dotenv import load_dotenv
+from enum import Enum
 from starlette.datastructures import CommaSeparatedStrings, Secret
 
 API_STR = "/api"
@@ -36,9 +37,12 @@ else:
     MONGODB_URL = DatabaseURL(MONGODB_URL)
 
 database_name = MONGO_INITDB_DATABASE
-article_collection_name = "articles"
-favorites_collection_name = "favorites"
-tags_collection_name = "tags"
-users_collection_name = "users"
-comments_collection_name = "commentaries"
-followers_collection_name = "followers"
+
+
+class Collection(Enum):
+    article = "articles"
+    favorites = "favorites"
+    tags = "tags"
+    users = "users"
+    comments = "commentaries"
+    followers = "followers"

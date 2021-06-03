@@ -6,7 +6,7 @@ from pytest import fixture
 from starlette.config import environ
 from starlette.testclient import TestClient
 
-from app.core.config import database_name
+from app.core.config import database_name, Collection
 from app.db.mongodb.db import get_database
 
 
@@ -52,10 +52,8 @@ def mongo_load_fixture(test_client, fixtures_dir):
         yield
 
     finally:
-        for (dirpath, _, filenames) in walk(fixtures_dir):
-            for filename in filenames:
-                collection_name = path.splitext(filename)[0]
-                loop.run_until_complete(db[database_name][collection_name].drop())
+        for collection_name in Collection:
+            loop.run_until_complete(db[database_name][collection_name.value].drop())
 
 
 @fixture(scope='function')
@@ -112,6 +110,11 @@ def get_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mo
 
 @fixture(scope='function')
 def get_articles_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+    pass
+
+
+@fixture(scope='function')
+def post_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
     pass
 
 

@@ -3,7 +3,7 @@ import os
 import pytest
 from slugify import slugify
 
-from app.core.config import article_collection_name
+from app.core.config import Collection
 from tests.conftest import find_all
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -50,7 +50,7 @@ def test_update_article(test_client, update_article_fixture, token, article, exp
     response = test_client.put(f'/api/v1/articles/{slug}', headers={'Authorization': token}, json=article)
     assert response.status_code == expected_code
     if check_article:
-        result = find_all(article_collection_name, {'title': article['article']['title']})
+        result = find_all(Collection.article.value, {'title': article['article']['title']})
         assert len(result) == 1
         for k, v in article['article'].items():
             assert result[0][k] == v

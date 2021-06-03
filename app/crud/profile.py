@@ -5,14 +5,14 @@ from starlette.status import HTTP_404_NOT_FOUND
 
 from app.crud.user import get_user
 from app.db.mongodb.db import AsyncIOMotorClient
-from app.core.config import database_name, followers_collection_name
+from app.core.config import database_name, Collection
 from app.models.profile import Profile
 
 
 async def is_following_for_user(
     conn: AsyncIOMotorClient, current_username: str, target_username: str
 ) -> bool:
-    count = await conn[database_name][followers_collection_name].count_documents({"follower": current_username,
+    count = await conn[database_name][Collection.followers.value].count_documents({"follower": current_username,
                                                                                   "following": target_username})
     return count > 0
 
@@ -20,12 +20,12 @@ async def is_following_for_user(
 async def follow_for_user(
     conn: AsyncIOMotorClient, current_username: str, target_username: str
 ):
-    await conn[database_name][followers_collection_name].insert_one({"follower": current_username,
+    await conn[database_name][Collection.followers.value].insert_one({"follower": current_username,
                                                                      "following": target_username})
 
 
 async def unfollow_user(conn: AsyncIOMotorClient, current_username: str, target_username: str):
-    await conn[database_name][followers_collection_name].delete_many({"follower": current_username,
+    await conn[database_name][Collection.followers.value].delete_many({"follower": current_username,
                                                                      "following": target_username})
 
 

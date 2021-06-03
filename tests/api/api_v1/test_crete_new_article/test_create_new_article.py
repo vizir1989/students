@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from app.core.config import article_collection_name, JWT_TOKEN_PREFIX
+from app.core.config import Collection, JWT_TOKEN_PREFIX
 from tests.conftest import find_all
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -65,4 +65,4 @@ def test_create_new_article(test_client, create_new_article_fixture, article, us
     response = test_client.post('/api/v1/articles', headers={'Authorization': token}, json=article)
     assert response.status_code == expected_code
     collection_filter = {'title': article['article']['title'], 'author_id': username}
-    assert len(find_all(article_collection_name, collection_filter)) == expected_articles_number
+    assert len(find_all(Collection.article.value, collection_filter)) == expected_articles_number
