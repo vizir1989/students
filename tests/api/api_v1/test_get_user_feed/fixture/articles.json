@@ -1,0 +1,35 @@
+[
+  {
+    "title": "title 1",
+    "description": "description 1",
+    "body": "body 1",
+    "tag_list": [
+      "tag 1",
+      "tag 2"
+    ],
+    "slug": "title-1",
+    "author_id": "test1"
+  },
+  {
+    "title": "title 2",
+    "description": "description 2",
+    "body": "body 2",
+    "tag_list": [
+      "tag 3",
+      "tag 2"
+    ],
+    "slug": "title-2",
+    "author_id": "test1"
+  },
+  {
+    "title": "title 3",
+    "description": "description 3",
+    "body": "body 3",
+    "tag_list": [
+      "tag 1",
+      "tag 5"
+    ],
+    "slug": "title-3",
+    "author_id": "test1"
+  }
+]
