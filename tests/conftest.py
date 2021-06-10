@@ -121,12 +121,7 @@ def post_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_time_
 
 @fixture(scope='function')
 def delete_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    import asyncio
-    loop = asyncio.get_event_loop()
-    db = loop.run_until_complete(get_database())
-
-    loop.run_until_complete(add_article_to_favorites(db, 'title-1', 'test2'))
-    loop.run_until_complete(add_article_to_favorites(db, 'title-2', 'test1'))
+    pass
 
 
 @fixture(scope='function')

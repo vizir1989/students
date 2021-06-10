@@ -1,0 +1,14 @@
+[
+  {
+    "_id": "111111111111111111111111",
+    "username": "test1",
+    "email": "test1@email.com",
+    "hashed_password": "12345678"
+  },
+  {
+    "_id": "222222222222222222222222",
+    "username": "test2",
+    "email": "test2@email.com",
+    "hashed_password": "12345678"
+  }
+]
