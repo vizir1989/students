@@ -42,9 +42,9 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                  ]
                          )
                          )
-def test_create_comments(test_client, create_comments_fixture, token, slug, comment, expected_code,
-                         expected_result):
-    response = test_client.post(f'/api/v1/articles/{slug}/comments', headers={'Authorization': token}, json=comment)
+def test_get_comments(test_client, get_comments_fixture, token, slug, comment, expected_code,
+                      expected_result):
+    response = test_client.get(f'/api/v1/articles/{slug}/comments', headers={'Authorization': token}, json=comment)
     assert response.status_code == expected_code
     if expected_result:
         assert response.json() == expected_result

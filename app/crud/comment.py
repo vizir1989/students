@@ -14,7 +14,8 @@ async def get_comments_for_article(
     rows = conn[database_name][Collection.comments.value].find({"slug": slug, "username": username})
     async for row in rows:
         author = await get_profile_for_user(conn, row["username"], username)
-        comments.append(CommentInDB(**row, author=author))
+        row['author'] = author
+        comments.append(CommentInDB.from_mongo(row))
     return comments
 
 
@@ -26,7 +27,8 @@ async def create_comment(
     comment_doc["username"] = username
     await conn[database_name][Collection.comments.value].insert_one(comment_doc)
     author = await get_profile_for_user(conn, username, "")
-    return CommentInDB(**comment_doc, author=author)
+    comment_doc['author'] = author
+    return CommentInDB.from_mongo(comment_doc)
 
 
 async def delete_comment(conn: AsyncIOMotorClient, id: int, username: str):

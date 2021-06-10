@@ -125,6 +125,11 @@ def delete_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_tim
 
 
 @fixture(scope='function')
+def get_comments_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+    pass
+
+
+@fixture(scope='function')
 def create_comments_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
     pass
 

@@ -9,24 +9,24 @@ from app.models.user import UserInCreate, UserInDB, UserInUpdate
 async def get_user(conn: AsyncIOMotorClient, username: str) -> UserInDB:
     row = await conn[database_name][Collection.users.value].find_one({"username": username})
     if row:
-        return UserInDB(**row)
+        return UserInDB.from_mongo(row)
 
 
 async def get_user_by_email(conn: AsyncIOMotorClient, email: EmailStr) -> UserInDB:
     row = await conn[database_name][Collection.users.value].find_one({"email": email})
     if row:
-        return UserInDB(**row)
+        return UserInDB.from_mongo(row)
 
 
 async def create_user(conn: AsyncIOMotorClient, user: UserInCreate) -> UserInDB:
-    dbuser = UserInDB(**user.dict())
+    dbuser = UserInDB.from_mongo(user.dict())
     dbuser.change_password(user.password)
 
     row = await conn[database_name][Collection.users.value].insert_one(dbuser.dict())
 
     dbuser.id = row.inserted_id
-    dbuser.created_at = ObjectId(dbuser.id ).generation_time
-    dbuser.updated_at = ObjectId(dbuser.id ).generation_time
+    dbuser.created_at = ObjectId(dbuser.id).generation_time
+    dbuser.updated_at = ObjectId(dbuser.id).generation_time
 
     return dbuser
 

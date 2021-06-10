@@ -21,7 +21,7 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                                              'username': 'test1'},
                                                   'body': 'comment 1',
                                                   'createdAt': None,
-                                                  'id': None,
+                                                  'id': '60c288d23bf5ca127126901a',
                                                   'updatedAt': None}}
                                  ],
                                  [

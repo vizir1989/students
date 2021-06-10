@@ -21,7 +21,7 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                                   "updatedAt": None, "slug": "title-2",
                                                   "author": {"username": "test2", "bio": "", "image": None,
                                                              "following": False}, "favorited": False,
-                                                  "favoritesCount": 0, "id": None}},
+                                                  "favoritesCount": 0, "id": '222222222222222222222222'}},
                                  ],
                                  [
                                      TASK_FIXTURE,
@@ -33,7 +33,7 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                                   "updatedAt": None, "slug": "title-1",
                                                   "author": {"username": "test1", "bio": "", "image": None,
                                                              "following": False}, "favorited": False,
-                                                  "favoritesCount": 0, "id": None}},
+                                                  "favoritesCount": 0, "id": '111111111111111111111111'}},
                                  ],
                                  [
                                      TASK_FIXTURE,

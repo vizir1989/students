@@ -16,12 +16,13 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                          'tag': 'tag 1'
                                      },
                                      200,
-                                     {"articles": [
-                                         {"title": "title 1", "description": "description 1", "body": "body 1",
-                                          "tagList": ["tag 1", "tag 2"], "createdAt": "2020-01-01T00:00:00Z",
-                                          "updatedAt": None, "slug": "title-1",
-                                          "author": {"username": "test1", "bio": "", "image": None, "following": False},
-                                          "favorited": False, "favoritesCount": 0, "id": None}], "articlesCount": 1}
+                                     {'articles': [
+                                         {'title': 'title 1', 'description': 'description 1', 'body': 'body 1',
+                                          'tagList': ['tag 1', 'tag 2'], 'createdAt': '2020-01-01T00:00:00Z',
+                                          'updatedAt': None, 'slug': 'title-1',
+                                          'author': {'username': 'test1', 'bio': '', 'image': None, 'following': False},
+                                          'favorited': False, 'favoritesCount': 0, 'id': '111111111111111111111111'}],
+                                         'articlesCount': 1}
                                  ],
                                  [
                                      TASK_FIXTURE,
@@ -30,12 +31,13 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                          'author_id': 'test1'
                                      },
                                      200,
-                                     {"articles": [
-                                         {"title": "title 1", "description": "description 1", "body": "body 1",
-                                          "tagList": ["tag 1", "tag 2"], "createdAt": "2020-01-01T00:00:00Z",
-                                          "updatedAt": None, "slug": "title-1",
-                                          "author": {"username": "test1", "bio": "", "image": None, "following": False},
-                                          "favorited": False, "favoritesCount": 0, "id": None}], "articlesCount": 1},
+                                     {'articles': [
+                                         {'title': 'title 1', 'description': 'description 1', 'body': 'body 1',
+                                          'tagList': ['tag 1', 'tag 2'], 'createdAt': '2020-01-01T00:00:00Z',
+                                          'updatedAt': None, 'slug': 'title-1',
+                                          'author': {'username': 'test1', 'bio': '', 'image': None, 'following': False},
+                                          'favorited': False, 'favoritesCount': 0, 'id': '111111111111111111111111'}],
+                                         'articlesCount': 1},
                                  ],
                                  [
                                      TASK_FIXTURE,
@@ -44,12 +46,13 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                          'favorited': 'title-1'
                                      },
                                      200,
-                                     {"articles": [
-                                         {"title": "title 1", "description": "description 1", "body": "body 1",
-                                          "tagList": ["tag 1", "tag 2"], "createdAt": "2020-01-01T00:00:00Z",
-                                          "updatedAt": None, "slug": "title-1",
-                                          "author": {"username": "test1", "bio": "", "image": None, "following": False},
-                                          "favorited": False, "favoritesCount": 0, "id": None}], "articlesCount": 1},
+                                     {'articles': [
+                                         {'title': 'title 1', 'description': 'description 1', 'body': 'body 1',
+                                          'tagList': ['tag 1', 'tag 2'], 'createdAt': '2020-01-01T00:00:00Z',
+                                          'updatedAt': None, 'slug': 'title-1',
+                                          'author': {'username': 'test1', 'bio': '', 'image': None, 'following': False},
+                                          'favorited': False, 'favoritesCount': 0, 'id': '111111111111111111111111'}],
+                                         'articlesCount': 1},
                                  ],
                                  [
                                      TASK_FIXTURE,
@@ -57,12 +60,13 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                      {
                                      },
                                      200,
-                                     {"articles": [
-                                         {"title": "title 1", "description": "description 1", "body": "body 1",
-                                          "tagList": ["tag 1", "tag 2"], "createdAt": "2020-01-01T00:00:00Z",
-                                          "updatedAt": None, "slug": "title-1",
-                                          "author": {"username": "test1", "bio": "", "image": None, "following": False},
-                                          "favorited": False, "favoritesCount": 0, "id": None}], "articlesCount": 1},
+                                     {'articles': [
+                                         {'title': 'title 1', 'description': 'description 1', 'body': 'body 1',
+                                          'tagList': ['tag 1', 'tag 2'], 'createdAt': '2020-01-01T00:00:00Z',
+                                          'updatedAt': None, 'slug': 'title-1',
+                                          'author': {'username': 'test1', 'bio': '', 'image': None, 'following': False},
+                                          'favorited': False, 'favoritesCount': 0, 'id': '111111111111111111111111'}],
+                                         'articlesCount': 1},
                                  ],
                                  [
                                      TASK_FIXTURE,
@@ -73,19 +77,20 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                      200,
                                      {'articles': [], 'articlesCount': 0},
                                  ],
-[
+                                 [
                                      TASK_FIXTURE,
                                      '',
                                      {
                                          'tag': 'tag 1'
                                      },
                                      200,
-                                     {"articles": [
-                                         {"title": "title 1", "description": "description 1", "body": "body 1",
-                                          "tagList": ["tag 1", "tag 2"], "createdAt": "2020-01-01T00:00:00Z",
-                                          "updatedAt": None, "slug": "title-1",
-                                          "author": {"username": "test1", "bio": "", "image": None, "following": False},
-                                          "favorited": False, "favoritesCount": 0, "id": None}], "articlesCount": 1}
+                                     {'articles': [
+                                         {'title': 'title 1', 'description': 'description 1', 'body': 'body 1',
+                                          'tagList': ['tag 1', 'tag 2'], 'createdAt': '2020-01-01T00:00:00Z',
+                                          'updatedAt': None, 'slug': 'title-1',
+                                          'author': {'username': 'test1', 'bio': '', 'image': None, 'following': False},
+                                          'favorited': False, 'favoritesCount': 0, 'id': '111111111111111111111111'}],
+                                         'articlesCount': 1}
                                  ]
                          )
                          )
