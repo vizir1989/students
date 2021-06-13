@@ -2,8 +2,6 @@ import os
 
 import pytest
 
-from tests.conftest import FAKE_TIME
-
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 TASK_FIXTURE = os.path.join(dir_path, 'fixture')

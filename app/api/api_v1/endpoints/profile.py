@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.get("/profiles/{username}", response_model=ProfileInResponse, tags=["profiles"])
 async def retrieve_profile(
-    username: str = Path(..., min_length=1),
+    username: str = Path(..., min_length=5),
     user: Optional[User] = Depends(get_current_user_authorizer(required=False)),
     db: AsyncIOMotorClient = Depends(get_database),
 ):
@@ -30,7 +30,7 @@ async def retrieve_profile(
     "/profiles/{username}/follow", response_model=ProfileInResponse, tags=["profiles"]
 )
 async def follow_user(
-    username: str = Path(..., min_length=1),
+    username: str = Path(..., min_length=5),
     user: User = Depends(get_current_user_authorizer()),
     db: AsyncIOMotorClient = Depends(get_database),
 ):
@@ -58,7 +58,7 @@ async def follow_user(
     "/profiles/{username}/follow", response_model=ProfileInResponse, tags=["profiles"]
 )
 async def describe_from_user(
-    username: str = Path(..., min_length=1),
+    username: str = Path(..., min_length=5),
     user: User = Depends(get_current_user_authorizer()),
     db: AsyncIOMotorClient = Depends(get_database),
 ):
