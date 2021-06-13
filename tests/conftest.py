@@ -152,5 +152,15 @@ def retrieve_profile_fixture(mongo_load_fixture, patch_jwt_decode):
     pass
 
 
+@fixture(scope='function')
+def profile_subscribe_fixture(mongo_load_fixture, patch_jwt_decode):
+    pass
+
+
+@fixture(scope='function')
+def profile_unsubscribe_fixture(mongo_load_fixture, patch_jwt_decode):
+    pass
+
+
 # This line would raise an error if we use it after 'settings' has been imported.
 environ['TESTING'] = 'TRUE'

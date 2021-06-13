@@ -27,9 +27,9 @@ async def retrieve_profile(
 
 
 @router.post(
-    "/profiles/{username}/follow", response_model=ProfileInResponse, tags=["profiles"]
+    "/profiles/{username}/subscribe", response_model=ProfileInResponse, tags=["profiles"]
 )
-async def follow_user(
+async def subscribe_from_user(
     username: str = Path(..., min_length=5),
     user: User = Depends(get_current_user_authorizer()),
     db: AsyncIOMotorClient = Depends(get_database),
@@ -55,9 +55,9 @@ async def follow_user(
 
 
 @router.delete(
-    "/profiles/{username}/follow", response_model=ProfileInResponse, tags=["profiles"]
+    "/profiles/{username}/unsubscribe", response_model=ProfileInResponse, tags=["profiles"]
 )
-async def describe_from_user(
+async def unsubscribe_from_user(
     username: str = Path(..., min_length=5),
     user: User = Depends(get_current_user_authorizer()),
     db: AsyncIOMotorClient = Depends(get_database),
