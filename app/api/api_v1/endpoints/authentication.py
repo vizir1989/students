@@ -8,9 +8,9 @@ from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from app.core.config import ACCESS_TOKEN_EXPIRE_MINUTES
 from app.core.jwt import create_access_token
 from app.crud.shortcuts import check_free_username_and_email
-from app.crud.user import create_user, get_user_by_email, get_user
+from app.crud.user import create_user, get_user
 from app.db.mongodb.db import AsyncIOMotorClient, get_database
-from app.models.user import User, UserInCreate, UserInLogin, UserInResponse, UserWithToken
+from app.models.user import User, UserInCreate, UserWithToken
 
 router = APIRouter()
 
@@ -34,7 +34,7 @@ async def login(
 
 @router.post(
     "/users",
-    response_model=UserInResponse,
+    response_model=UserWithToken,
     tags=["authentication"],
     status_code=HTTP_201_CREATED,
 )
@@ -51,4 +51,4 @@ async def register(
                 data={"username": dbuser.username}, expires_delta=access_token_expires
             )
 
-            return UserInResponse(user=User(**dbuser.dict(), token=token))
+            return UserWithToken(user=User(**dbuser.dict()), access_token=token)

@@ -29,9 +29,9 @@ async def create_comment_for_article(
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
-    await get_article_or_404(db, slug, user.username)
+    await get_article_or_404(db, slug, user.user.username)
 
-    dbcomment = await create_comment(db, slug, comment, user.username)
+    dbcomment = await create_comment(db, slug, comment, user.user.username)
     return create_aliased_response(CommentInResponse(comment=dbcomment), status_code=HTTP_201_CREATED)
 
 
@@ -45,9 +45,9 @@ async def get_comment_from_article(
         user: User = Depends(get_current_user_authorizer(required=False)),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
-    await get_article_or_404(db, slug, user.username)
+    await get_article_or_404(db, slug, user.user.username)
 
-    dbcomments = await get_comments_for_article(db, slug, user.username)
+    dbcomments = await get_comments_for_article(db, slug, user.user.username)
     return create_aliased_response(ManyCommentsInResponse(comments=dbcomments))
 
 
@@ -60,6 +60,6 @@ async def delete_comment_from_article(
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
-    await get_article_or_404(db, slug, user.username)
+    await get_article_or_404(db, slug, user.user.username)
 
-    await delete_comment_or_404(db, id, user.username)
+    await delete_comment_or_404(db, id, user.user.username)

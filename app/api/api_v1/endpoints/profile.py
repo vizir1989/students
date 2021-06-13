@@ -20,7 +20,7 @@ async def retrieve_profile(
     db: AsyncIOMotorClient = Depends(get_database),
 ):
     profile = await get_profile_for_user(
-        db, username, user.username if user else None
+        db, username, user.user.username if user else None
     )
     profile = ProfileInResponse(profile=profile)
     return profile
@@ -34,13 +34,13 @@ async def subscribe_from_user(
     user: User = Depends(get_current_user_authorizer()),
     db: AsyncIOMotorClient = Depends(get_database),
 ):
-    if username == user.username:
+    if username == user.user.username:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY,
             detail=f"User can not follow them self",
         )
 
-    profile = await get_profile_for_user(db, username, user.username)
+    profile = await get_profile_for_user(db, username, user.user.username)
 
     if profile.following:
         raise HTTPException(
@@ -48,7 +48,7 @@ async def subscribe_from_user(
             detail=f"You follow this user already",
         )
 
-    await follow_for_user(db, user.username, profile.username)
+    await follow_for_user(db, user.user.username, profile.username)
     profile.following = True
 
     return ProfileInResponse(profile=profile)
@@ -62,13 +62,13 @@ async def unsubscribe_from_user(
     user: User = Depends(get_current_user_authorizer()),
     db: AsyncIOMotorClient = Depends(get_database),
 ):
-    if username == user.username:
+    if username == user.user.username:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY,
             detail=f"User can not describe from them self",
         )
 
-    profile = await get_profile_for_user(db, username, user.username)
+    profile = await get_profile_for_user(db, username, user.user.username)
 
     if not profile.following:
         raise HTTPException(
@@ -76,7 +76,7 @@ async def unsubscribe_from_user(
             detail=f"You did not follow this user",
         )
 
-    await unfollow_user(db, user.username, profile.username)
+    await unfollow_user(db, user.user.username, profile.username)
     profile.following = False
 
     return ProfileInResponse(profile=profile)

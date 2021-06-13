@@ -54,7 +54,7 @@ async def get_articles(
         tag=tag, author=author, favorited=favorited, limit=limit, offset=offset
     )
     dbarticles = await get_articles_with_filters(
-        db, filters, user.username if user else None
+        db, filters, user.user.username if user else None
     )
     return create_aliased_response(
         ManyArticlesInResponse(articles=dbarticles, articles_count=len(dbarticles))
@@ -68,7 +68,7 @@ async def articles_feed(
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
-    dbarticles = await get_user_articles(db, user.username, limit, offset)
+    dbarticles = await get_user_articles(db, user.user.username, limit, offset)
     return create_aliased_response(
         ManyArticlesInResponse(articles=dbarticles, articles_count=len(dbarticles))
     )
@@ -81,7 +81,7 @@ async def get_article(
         db: AsyncIOMotorClient = Depends(get_database),
 ):
     dbarticle = await get_article_by_slug(
-        db, slug, user.username if user else None
+        db, slug, user.user.username if user else None
     )
     if not dbarticle:
         raise HTTPException(
@@ -104,7 +104,7 @@ async def create_new_article(
         db: AsyncIOMotorClient = Depends(get_database),
 ):
     article_by_slug = await get_article_by_slug(
-        db, slugify(article.title), user.username
+        db, slugify(article.title), user.user.username
     )
     if article_by_slug:
         raise HTTPException(
@@ -112,7 +112,7 @@ async def create_new_article(
             detail=f"The Article already exists slug='{article_by_slug.slug}'",
         )
 
-    dbarticle = await create_article_by_slug(db, article, user.username)
+    dbarticle = await create_article_by_slug(db, article, user.user.username)
     return create_aliased_response(ArticleInResponse(article=dbarticle), HTTP_201_CREATED)
 
 
@@ -124,10 +124,10 @@ async def update_article(
         db: AsyncIOMotorClient = Depends(get_database),
 ):
     await check_article_for_existence_and_modifying_permissions(
-        db, slug, user.username
+        db, slug, user.user.username
     )
 
-    dbarticle = await update_article_by_slug(db, slug, article, user.username)
+    dbarticle = await update_article_by_slug(db, slug, article, user.user.username)
     return create_aliased_response(ArticleInResponse(article=dbarticle))
 
 
@@ -138,10 +138,10 @@ async def delete_article(
         db: AsyncIOMotorClient = Depends(get_database),
 ):
     await check_article_for_existence_and_modifying_permissions(
-        db, slug, user.username
+        db, slug, user.user.username
     )
 
-    await delete_article_by_slug(db, slug, user.username)
+    await delete_article_by_slug(db, slug, user.user.username)
 
 
 @router.post(
@@ -152,7 +152,7 @@ async def favorite_article(
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
-    dbarticle = await get_article_or_404(db, slug, user.username)
+    dbarticle = await get_article_or_404(db, slug, user.user.username)
     if dbarticle.favorited:
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
@@ -162,7 +162,7 @@ async def favorite_article(
     dbarticle.favorited = True
     dbarticle.favorites_count += 1
 
-    await add_article_to_favorites(db, slug, user.username)
+    await add_article_to_favorites(db, slug, user.user.username)
     return create_aliased_response(ArticleInResponse(article=dbarticle))
 
 
@@ -174,7 +174,7 @@ async def delete_article_from_favorites(
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
-    dbarticle = await get_article_or_404(db, slug, user.username)
+    dbarticle = await get_article_or_404(db, slug, user.user.username)
 
     if not dbarticle.favorited:
         raise HTTPException(
@@ -185,5 +185,5 @@ async def delete_article_from_favorites(
     dbarticle.favorited = False
     dbarticle.favorites_count -= 1
 
-    await remove_article_from_favorites(db, slug, user.username)
+    await remove_article_from_favorites(db, slug, user.user.username)
     return create_aliased_response(ArticleInResponse(article=dbarticle))

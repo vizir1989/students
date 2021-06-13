@@ -1,18 +1,13 @@
+import datetime
 import json
 from os import walk, path
 
-import datetime
-
-import motor
-import pymongo
-import uuid
 from pytest import fixture
 from starlette.config import environ
 from starlette.testclient import TestClient
 
 from app.core.config import database_name, Collection
 from app.db.mongodb.db import get_database
-
 
 FAKE_TIME = datetime.datetime(2020, 1, 1, 0, 0, 0).strftime("%Y-%m-%dT%H:%M:%S%ZZ")
 
@@ -164,6 +159,16 @@ def profile_unsubscribe_fixture(mongo_load_fixture, patch_jwt_decode):
 
 @fixture(scope='function')
 def get_tags_fixture(mongo_load_fixture, patch_jwt_decode):
+    pass
+
+
+@fixture(scope='function')
+def get_user_fixture(mongo_load_fixture, patch_jwt_decode):
+    pass
+
+
+@fixture(scope='function')
+def update_user_fixture(mongo_load_fixture, patch_jwt_decode):
     pass
 
 

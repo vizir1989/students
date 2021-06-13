@@ -36,10 +36,6 @@ class UserWithToken(RWModel):
     token_type: str = "Bearer"
 
 
-class UserInResponse(RWModel):
-    user: User
-
-
 class UserInLogin(RWModel):
     email: EmailStr
     password: str

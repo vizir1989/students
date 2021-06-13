@@ -11,7 +11,7 @@ from starlette.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 from app.crud.user import get_user
 from app.db.mongodb.db import AsyncIOMotorClient, get_database
 from app.models.token import TokenPayload
-from app.models.user import User
+from app.models.user import User, UserWithToken
 
 from .config import JWT_TOKEN_PREFIX, SECRET_KEY, ALGORITHM
 
@@ -32,7 +32,7 @@ def _get_authorization_token(authorization: str = Header(...)):
 
 async def _get_current_user(
     db: AsyncIOMotorClient = Depends(get_database), token: str = Depends(oauth2_scheme)
-) -> User:
+) -> UserWithToken:
     try:
         payload = jwt.decode(token, str(SECRET_KEY), algorithms=[ALGORITHM])
         token_data = TokenPayload(**payload)
@@ -45,7 +45,7 @@ async def _get_current_user(
     if not dbuser:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="User not found")
 
-    user = User(**dbuser.dict(), token=token)
+    user = UserWithToken(user=dbuser, access_token=token)
     return user
 
 
@@ -58,7 +58,7 @@ def _get_authorization_token_optional(authorization: str = Header(None)):
 async def _get_current_user_optional(
     db: AsyncIOMotorClient = Depends(get_database),
     token: str = Depends(_get_authorization_token_optional),
-) -> Optional[User]:
+) -> Optional[UserWithToken]:
     if token:
         return await _get_current_user(db, token)
 
