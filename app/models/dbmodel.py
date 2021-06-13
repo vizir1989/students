@@ -25,4 +25,4 @@ class DateTimeModelMixin(BaseModel):
 
 
 class DBModelMixin(DateTimeModelMixin):
-    id: OID
+    id: Optional[OID] = None

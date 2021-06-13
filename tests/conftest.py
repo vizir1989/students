@@ -2,12 +2,15 @@ import json
 from os import walk, path
 
 import datetime
+
+import motor
+import pymongo
+import uuid
 from pytest import fixture
 from starlette.config import environ
 from starlette.testclient import TestClient
 
 from app.core.config import database_name, Collection
-from app.crud.article import add_article_to_favorites
 from app.db.mongodb.db import get_database
 
 
@@ -84,24 +87,24 @@ def patch_jwt_decode(monkeypatch):
 
 
 @fixture(scope='function')
+def generation_time_mock(monkeypatch, mocker):
+    property_mock = mocker.PropertyMock(return_value=FAKE_TIME)
+    monkeypatch.setattr('bson.objectid.ObjectId.generation_time', property_mock)
+
+
+@fixture(scope='function')
 def create_new_article_fixture(mongo_load_fixture, patch_jwt_decode):
     pass
 
 
 @fixture(scope='function')
-def delete_article_fixture(mongo_load_fixture, patch_jwt_decode):
+def delete_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
     pass
 
 
 @fixture(scope='function')
 def update_article_fixture(mongo_load_fixture, patch_jwt_decode):
     pass
-
-
-@fixture(scope='function')
-def generation_time_mock(monkeypatch, mocker):
-    property_mock = mocker.PropertyMock(return_value=FAKE_TIME)
-    monkeypatch.setattr('bson.objectid.ObjectId.generation_time', property_mock)
 
 
 @fixture(scope='function')
@@ -115,12 +118,12 @@ def get_articles_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_m
 
 
 @fixture(scope='function')
-def post_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+def post_favorite_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
     pass
 
 
 @fixture(scope='function')
-def delete_favorite_article(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+def delete_favorite_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
     pass
 
 
@@ -131,6 +134,11 @@ def get_comments_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_m
 
 @fixture(scope='function')
 def create_comments_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+    pass
+
+
+@fixture(scope='function')
+def get_user_feed_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
     pass
 
 

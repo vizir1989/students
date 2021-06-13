@@ -51,7 +51,7 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                  ]
                          )
                          )
-def test_delete_favorite_article(test_client, delete_favorite_article, token, slug, expected_code, expected_result):
+def test_delete_favorite_article(test_client, delete_favorite_article_fixture, token, slug, expected_code, expected_result):
     resposne = test_client.delete(f'/api/v1/articles/{slug}/favorite', headers={'Authorization': token})
     assert resposne.status_code == expected_code
     if expected_result:

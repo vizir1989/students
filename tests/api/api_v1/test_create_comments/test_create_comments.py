@@ -21,7 +21,6 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                                              'username': 'test1'},
                                                   'body': 'comment 1',
                                                   'createdAt': None,
-                                                  'id': '60c288d23bf5ca127126901a',
                                                   'updatedAt': None}}
                                  ],
                                  [
@@ -47,4 +46,6 @@ def test_create_comments(test_client, create_comments_fixture, token, slug, comm
     response = test_client.post(f'/api/v1/articles/{slug}/comments', headers={'Authorization': token}, json=comment)
     assert response.status_code == expected_code
     if expected_result:
-        assert response.json() == expected_result
+        result = response.json()
+        result['comment'].pop('id')
+        assert result == expected_result

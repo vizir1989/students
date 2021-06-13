@@ -67,7 +67,7 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                  ]
                          )
                          )
-def test_get_articles(test_client, get_articles_fixture, token, expected_code,
+def test_get_user_feed(test_client, get_user_feed_fixture, token, expected_code,
                       expected_result):
     response = test_client.get(f'/api/v1/articles/feed', headers={'Authorization': token})
     assert response.status_code == expected_code

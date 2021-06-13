@@ -51,7 +51,7 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                  ],
                          )
                          )
-def test_post_favorite_article(test_client, post_favorite_article, token, slug, expected_code,
+def test_post_favorite_article(test_client, post_favorite_article_fixture, token, slug, expected_code,
                                expected_result):
     response = test_client.post(f'/api/v1/articles/{slug}/favorite', headers={'Authorization': token})
     assert response.status_code == expected_code

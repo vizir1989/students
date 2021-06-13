@@ -19,7 +19,7 @@ async def get_user_by_email(conn: AsyncIOMotorClient, email: EmailStr) -> UserIn
 
 
 async def create_user(conn: AsyncIOMotorClient, user: UserInCreate) -> UserInDB:
-    dbuser = UserInDB.from_mongo(user.dict())
+    dbuser = UserInDB(**user.dict())
     dbuser.change_password(user.password)
 
     row = await conn[database_name][Collection.users.value].insert_one(dbuser.dict())
