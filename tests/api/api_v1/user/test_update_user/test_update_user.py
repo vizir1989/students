@@ -25,6 +25,19 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                  [
                                      TASK_FIXTURE,
                                      'Bearer test1',
+                                     {'user': {'username': 'test1',
+                                               'email': 'test1@email.com',
+                                               'password': '12345678',
+                                               'bio': 'bio 2',
+                                               'image': 'http://fake.com/fake.jpg'}},
+                                     200,
+                                     {'user': {'username': 'test1', 'email': 'test1@email.com', 'bio': 'bio 2',
+                                               'image': 'http://fake.com/fake.jpg'}, 'access_token': 'test1',
+                                      'token_type': 'Bearer'}
+                                 ],
+                                 [
+                                     TASK_FIXTURE,
+                                     'Bearer test1',
                                      {'user': {'username': 'test2',
                                                'email': 'test3@email.com',
                                                'password': '12345678',

@@ -17,14 +17,15 @@ docker-compose up -d --force-recreate
 ```
 2. run pytest
 ```shell
-docker-compose exec web coverage run -m tox .
-```
-3. check coverage
-```shell
-docker-compose exec web coverage report
+docker-compose exec web tox .
 ```
 
-4. run checking codestyle
+3. run pytest
+```shell
+docker-compose exec web poetry run pytest --cov-report term-missing --cov app ./tests
+```
+
+3. run checking codestyle
 ```shell
 pycodestyle --config pycodestyle.ini .
 ```

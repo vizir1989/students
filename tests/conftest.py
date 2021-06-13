@@ -56,8 +56,11 @@ def mongo_load_fixture(test_client, fixtures_dir):
 
 
 @fixture(scope='function')
-def create_user_fixture(mongo_load_fixture):
-    pass
+def patch_jwt_decode(monkeypatch):
+    def mocked_decode(token, *args, **kwargs):
+        return {'username': token}
+
+    monkeypatch.setattr('jwt.decode', mocked_decode)
 
 
 @fixture(scope='function')
@@ -69,107 +72,10 @@ def patch_verify_password(monkeypatch):
 
 
 @fixture(scope='function')
-def users_login_fixture(mongo_load_fixture, patch_verify_password):
-    pass
-
-
-@fixture(scope='function')
-def patch_jwt_decode(monkeypatch):
-    def mocked_decode(token, *args, **kwargs):
-        return {'username': token}
-
-    monkeypatch.setattr('jwt.decode', mocked_decode)
-
-
-@fixture(scope='function')
 def generation_time_mock(monkeypatch, mocker):
     property_mock = mocker.PropertyMock(return_value=FAKE_TIME)
     monkeypatch.setattr('bson.objectid.ObjectId.generation_time', property_mock)
 
-
-@fixture(scope='function')
-def create_new_article_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
-
-
-@fixture(scope='function')
-def delete_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    pass
-
-
-@fixture(scope='function')
-def update_article_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
-
-
-@fixture(scope='function')
-def get_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    pass
-
-
-@fixture(scope='function')
-def get_articles_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    pass
-
-
-@fixture(scope='function')
-def post_favorite_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    pass
-
-
-@fixture(scope='function')
-def delete_favorite_article_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    pass
-
-
-@fixture(scope='function')
-def get_comments_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    pass
-
-
-@fixture(scope='function')
-def create_comments_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    pass
-
-
-@fixture(scope='function')
-def get_article_feed_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
-    pass
-
-
-@fixture(scope='function')
-def delete_comment_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
-
-
-@fixture(scope='function')
-def retrieve_profile_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
-
-
-@fixture(scope='function')
-def profile_subscribe_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
-
-
-@fixture(scope='function')
-def profile_unsubscribe_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
-
-
-@fixture(scope='function')
-def get_tags_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
-
-
-@fixture(scope='function')
-def get_user_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
-
-
-@fixture(scope='function')
-def update_user_fixture(mongo_load_fixture, patch_jwt_decode):
-    pass
 
 
 # This line would raise an error if we use it after 'settings' has been imported.

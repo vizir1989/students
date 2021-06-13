@@ -22,6 +22,13 @@ TASK_FIXTURE = os.path.join(dir_path, 'fixture')
                                      'test2',
                                      200,
                                      {'profile': {'username': 'test2', 'bio': '', 'image': None, 'following': False}}
+                                 ],
+                                 [
+                                     TASK_FIXTURE,
+                                     'Bearer test2',
+                                     'test1',
+                                     422,
+                                     {}
                                  ]
                          )
                          )
