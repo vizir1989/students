@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import UrlStr
+from pydantic import HttpUrl
 
 from .rwmodel import RWModel
 
@@ -8,7 +8,7 @@ from .rwmodel import RWModel
 class Profile(RWModel):
     username: str
     bio: Optional[str] = ""
-    image: Optional[UrlStr] = None
+    image: Optional[HttpUrl] = None
     following: bool = False
 
 

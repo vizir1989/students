@@ -3,7 +3,7 @@ from typing import Optional
 
 from bson import ObjectId
 from bson.errors import InvalidId
-from pydantic import BaseModel, Schema
+from pydantic import BaseModel, Field
 
 
 class OID(str):
@@ -20,8 +20,11 @@ class OID(str):
 
 
 class DateTimeModelMixin(BaseModel):
-    created_at: Optional[datetime] = Schema(..., alias="createdAt")
-    updated_at: Optional[datetime] = Schema(..., alias="updatedAt")
+    created_at: Optional[datetime] = Field(None, alias="createdAt")
+    updated_at: Optional[datetime] = Field(None, alias="updatedAt")
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class DBModelMixin(DateTimeModelMixin):

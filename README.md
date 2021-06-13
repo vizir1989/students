@@ -7,7 +7,7 @@ TODO:
 3. code style
 4. sonar or something like this
 5. redis
-6. prometheus
+6. prometheus and graphana
 7. logging parser
 
 # run pytest
@@ -17,7 +17,7 @@ docker-compose up -d --force-recreate
 ```
 2. run pytest
 ```shell
-docker-compose exec web coverage run -m pytest .
+docker-compose exec web coverage run -m tox .
 ```
 3. check coverage
 ```shell

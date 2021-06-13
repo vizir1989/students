@@ -56,7 +56,7 @@ async def get_comment_from_article(
 )
 async def delete_comment_from_article(
         slug: str = Path(..., min_length=5),
-        id: str = Path(..., ge=1),
+        id: str = Path(...),
         user: User = Depends(get_current_user_authorizer()),
         db: AsyncIOMotorClient = Depends(get_database),
 ):

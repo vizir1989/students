@@ -4,6 +4,7 @@ branch = True
 omit =
     # omit tests
     ./tests/*
+    ./.tox
 
 [report]
 # Regexes for lines to exclude from consideration
@@ -24,6 +25,10 @@ exclude_lines =
     if __name__ == .__main__.:
 
 ignore_errors = True
+fail_under=90
+
+[xml]
+output = coverage/xml_report/coverage.xml
 
 [html]
-directory = coverage_html_report
+directory = coverage/html_report

@@ -9,18 +9,19 @@ license = "MIT"
 python = "^3.7"
 uvicorn = "^0.6.1"
 gunicorn = "^19.9"
-fastapi = "^0.29"
-pydantic = {version = "^0.26.0",extras = ["email"]}
+fastapi = "^0.65"
+pydantic = {version = "^1.8.2",extras = ["email"]}
 passlib = {version = "^1.7",extras = ["bcrypt"]}
 pyjwt = "^1.7"
 python-slugify = "^3.0"
 Unidecode = "^1.0"
 python-dotenv = "^0.10.1"
 databases = "^0.2.1"
-motor = "^2.0"
+motor = "^2.4"
 python-jose = "^3.2.0"
 python-multipart = "^0.0.5"
 requests = "^2.25.1"
+prometheus-fastapi-instrumentator = "^5.7.1"
 
 
 [tool.poetry.dev-dependencies]
@@ -28,9 +29,9 @@ pytest = "*"
 tox = "^3.23.1"
 coverage = "^5.5"
 tox-poetry = "^0.3.0"
-freezegun = "^1.1.0"
 pytest-asyncio = "^0.15.1"
 pytest-mock = "^3.6.1"
+pytest-cov = "^2.12.1"
 
 
 [tool.black]
