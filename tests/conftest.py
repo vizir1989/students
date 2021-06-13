@@ -142,5 +142,10 @@ def get_user_feed_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_
     pass
 
 
+@fixture(scope='function')
+def delete_comment_fixture(mongo_load_fixture, patch_jwt_decode, generation_time_mock):
+    pass
+
+
 # This line would raise an error if we use it after 'settings' has been imported.
 environ['TESTING'] = 'TRUE'

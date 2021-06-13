@@ -1,5 +1,7 @@
 from typing import List, Optional
 
+from starlette.exceptions import HTTPException
+from starlette.status import HTTP_404_NOT_FOUND
 
 from app.models.comment import CommentInCreate, CommentInDB
 from app.db.mongodb.db import AsyncIOMotorClient
@@ -31,5 +33,10 @@ async def create_comment(
     return CommentInDB.from_mongo(comment_doc)
 
 
-async def delete_comment(conn: AsyncIOMotorClient, id: int, username: str):
-    await conn[database_name][Collection.comments.value].delete_many({"id": id, "username": username})
+async def delete_comment_or_404(conn: AsyncIOMotorClient, id: str, username: str):
+    result = await conn[database_name][Collection.comments.value].delete_many({"_id": id, "username": username})
+    if result.deleted_count == 0:
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f"Comments with id '{id}' not found",
+        )

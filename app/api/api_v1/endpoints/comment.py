@@ -3,7 +3,7 @@ from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
 from app.core.jwt import get_current_user_authorizer
 from app.core.utils import create_aliased_response
-from app.crud.comment import create_comment, delete_comment, get_comments_for_article
+from app.crud.comment import create_comment, get_comments_for_article, delete_comment_or_404
 from app.crud.shortcuts import get_article_or_404
 from app.db.mongodb.db import AsyncIOMotorClient, get_database
 from app.models.comment import (
@@ -23,11 +23,11 @@ router = APIRouter()
     status_code=HTTP_201_CREATED,
 )
 async def create_comment_for_article(
-    *,
-    slug: str = Path(..., min_length=5),
-    comment: CommentInCreate = Body(..., embed=True),
-    user: User = Depends(get_current_user_authorizer()),
-    db: AsyncIOMotorClient = Depends(get_database),
+        *,
+        slug: str = Path(..., min_length=5),
+        comment: CommentInCreate = Body(..., embed=True),
+        user: User = Depends(get_current_user_authorizer()),
+        db: AsyncIOMotorClient = Depends(get_database),
 ):
     await get_article_or_404(db, slug, user.username)
 
@@ -41,9 +41,9 @@ async def create_comment_for_article(
     tags=["comments"],
 )
 async def get_comment_from_article(
-    slug: str = Path(..., min_length=5),
-    user: User = Depends(get_current_user_authorizer(required=False)),
-    db: AsyncIOMotorClient = Depends(get_database),
+        slug: str = Path(..., min_length=5),
+        user: User = Depends(get_current_user_authorizer(required=False)),
+        db: AsyncIOMotorClient = Depends(get_database),
 ):
     await get_article_or_404(db, slug, user.username)
 
@@ -55,11 +55,11 @@ async def get_comment_from_article(
     "/articles/{slug}/comments/{id}", tags=["comments"], status_code=HTTP_204_NO_CONTENT
 )
 async def delete_comment_from_article(
-    slug: str = Path(..., min_length=5),
-    id: int = Path(..., ge=1),
-    user: User = Depends(get_current_user_authorizer()),
-    db: AsyncIOMotorClient = Depends(get_database),
+        slug: str = Path(..., min_length=5),
+        id: str = Path(..., ge=1),
+        user: User = Depends(get_current_user_authorizer()),
+        db: AsyncIOMotorClient = Depends(get_database),
 ):
     await get_article_or_404(db, slug, user.username)
 
-    await delete_comment(db, id, user.username)
+    await delete_comment_or_404(db, id, user.username)
